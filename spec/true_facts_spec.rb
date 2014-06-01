@@ -51,6 +51,15 @@ describe TrueFacts do
     })
   end
 
+  # doubling down on highly questionable behavior
+  it "skips empty subfacts when converting to a hash" do
+    fact.gotta_pee = "always"
+    fact.hundreds.of.channels.and.nothing.to.watch # => deeply nested sub-fact
+    expect( fact.to_hash ).to eq({
+      gotta_pee: "always",
+    })
+  end
+
   specify "facts can't contain themselves directly" do
     expect { fact.is = fact }
       .to raise_error( TrueFacts::CircularLogicError )
