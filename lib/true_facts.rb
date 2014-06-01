@@ -1,5 +1,6 @@
 require "true_facts/version"
 require "true_facts/exceptions"
+require "true_facts/fact_checker"
 
 class TrueFacts
   attr_reader :parent
@@ -28,7 +29,6 @@ class TrueFacts
     Hash[ pairs ]
   end
 
-  protected # yes, really
   def __fact_ancestors__
     return [] unless parent.respond_to?(:__fact_ancestors__)
     [parent] + parent.__fact_ancestors__
@@ -38,26 +38,13 @@ class TrueFacts
   attr_reader :dictionary
 
   def store_fact(fact_name, new_value)
-    guard_against_retcon fact_name, new_value
-    guard_against_factception new_value
+    old_value = dictionary.fetch(fact_name) { new_value }
+    FactChecker.check(self, fact_name, old_value, new_value)
 
     dictionary[fact_name] = new_value
   end
 
   def fetch_fact(fact_name)
     dictionary[fact_name]
-  end
-
-  def guard_against_retcon(fact_name, new_value)
-    old_value = dictionary.fetch(fact_name) { new_value }
-    if new_value != old_value
-      fail WellActuallyError.new( fact_name, old_value, new_value )
-    end
-  end
-
-  def guard_against_factception(new_value)
-    if new_value == self || __fact_ancestors__.include?(new_value)
-      fail CircularLogicError, "Can't store facts inside themselves!"
-    end
   end
 end
