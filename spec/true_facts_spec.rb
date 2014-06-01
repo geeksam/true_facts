@@ -52,13 +52,11 @@ describe TrueFacts do
   end
 
   specify "facts can't contain themselves directly" do
-    fact.oxygen = "required by humans"
     expect { fact.is = fact }
       .to raise_error( TrueFacts::CircularLogicError )
   end
 
   specify "facts can't contain themselves indirectly", wip: true do
-    fact.the_word_buffalo = "Buffalo"
     expect { fact.Buffalo.buffalo.Buffalo.buffalo.buffalo.buffalo.Buffalo.buffalo = fact }
      .to raise_error( TrueFacts::CircularLogicError )
   end
