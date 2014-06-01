@@ -36,21 +36,21 @@ class TrueFacts
   private
   attr_reader :dictionary
 
-  def store_fact(name, new_value)
-    guard_against_retcon name, new_value
+  def store_fact(fact_name, new_value)
+    guard_against_retcon fact_name, new_value
     guard_against_factception new_value
 
-    dictionary[name] = new_value
+    dictionary[fact_name] = new_value
   end
 
-  def fetch_fact(name)
-    dictionary[name]
+  def fetch_fact(fact_name)
+    dictionary[fact_name]
   end
 
-  def guard_against_retcon(name, new_value)
-    old_value = dictionary.fetch(name) { new_value }
+  def guard_against_retcon(fact_name, new_value)
+    old_value = dictionary.fetch(fact_name) { new_value }
     if new_value != old_value
-      fail WellActuallyError.new( name, old_value, new_value )
+      fail WellActuallyError.new( fact_name, old_value, new_value )
     end
   end
 
