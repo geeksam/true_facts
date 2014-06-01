@@ -1,4 +1,5 @@
 require "true_facts/version"
+require "true_facts/exceptions"
 
 class TrueFacts
   attr_reader :parent
@@ -58,20 +59,5 @@ class TrueFacts
     if new_value == self || __fact_ancestors__.include?(new_value)
       fail CircularLogicError, "Can't store facts inside themselves!"
     end
-  end
-
-  ##### Custom exception classes #####
-
-  class WellActuallyError < ArgumentError
-    def initialize(fact_name, old_value, new_value)
-      super <<EOF
-Can't change [[ #{fact_name} ]]
-from #{old_value.inspect}
-  to #{new_value.inspect}
-EOF
-    end
-  end
-
-  class CircularLogicError < ArgumentError
   end
 end
