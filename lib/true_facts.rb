@@ -34,7 +34,7 @@ class TrueFacts
   private
 
   def store_fact(fact_name, new_value)
-    old_value = __dictionary__.fetch(fact_name) { new_value }
+    old_value = __dictionary__.fetch(fact_name) { new_value } # works, but looks a bit weird
     FactChecker.check(self, fact_name, old_value, new_value)
 
     __dictionary__[fact_name] = new_value
